@@ -1,3 +1,5 @@
+import { FETCH_GIF } from "../constants/actionTypes";
+
 const initialState = () => {
   return {
     resultReceived: [],
@@ -9,7 +11,13 @@ const initialState = () => {
 };
 
 const giphyReducer = (state = initialState(), action) => {
+  console.log('GIPHY REDUCER', action)
   switch (action.type) {
+    case FETCH_GIF:
+      return {
+        ...state,
+        resultReceived: action.payload
+      };
     default:
       return state;
   }

@@ -65,6 +65,8 @@ class GiphsDisconnected extends Component {
         <h6>{`Total Liked Is: ${totalLiked}`}</h6>
         <button onClick={() => removeLike(totalLiked)}>Unlike</button>
         <button onClick={() => removeAllLikes()}>Remove All Likes</button>
+        <h1>Fetched data from reducer stringified:</h1>
+        <div>{JSON.stringify(this.props.resultReceived.data)}</div>
       </>
     );
   }
