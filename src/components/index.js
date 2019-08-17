@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store.js';
-import {Container} from './client/Container.jsx';
+import { Giphs } from './containers/Giphs';
 
 export const App = () => (
   <Provider store={store}>
-    <Container falseProp={'testing a passed in prop'} />
+    <Giphs />
   </Provider>
-);
+); 
 
