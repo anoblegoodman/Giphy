@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import injectSheet from 'react-jss'
 import * as giphActions from '../action/giphActions';
 import * as likeActions from '../action/likeActions';
 
@@ -44,7 +45,7 @@ class GiphsDisconnected extends Component {
   };
 
   render() {
-    const { totalLiked, removeLike, removeAllLikes, addLike } = this.props;
+    const { totalLiked, removeLike, removeAllLikes, addLike, classes } = this.props;
     const { searchTerm } = this.state;
     console.log('this.props', this.props);
     console.log('this.state', this.state);
@@ -56,8 +57,7 @@ class GiphsDisconnected extends Component {
           type="text"
           placeholder="Search"
         />
-        <button onClick={() => this.handleSubmitButton()}>
-          <h5>{`the gif being fetched is: ${searchTerm}`}</h5>
+        <button className={classes.submitButton} onClick={() => this.handleSubmitButton()}>
           Submit
         </button>
         <br />
@@ -69,7 +69,24 @@ class GiphsDisconnected extends Component {
     );
   }
 }
+
+const styles = {
+  submitButton: {
+    margin: 5,
+    padding: {
+      top: 5,
+      bottom: 5,
+      right: 10,
+      left: 10
+    },
+    backgroundColor: 'pink',
+    color: 'black'
+  },
+}
+
+const StyledGiph = injectSheet(styles)(GiphsDisconnected)
+
 export const Giphs = connect(
   mapStateToProps,
   mapDispatchToProps
-)(GiphsDisconnected);
+)(StyledGiph);

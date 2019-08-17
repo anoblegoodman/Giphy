@@ -8,4 +8,3 @@ export const App = () => (
     <Giphs />
   </Provider>
 ); 
-
