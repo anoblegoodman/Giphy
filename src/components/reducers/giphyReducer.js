@@ -3,7 +3,6 @@ import { FETCH_GIF } from "../constants/actionTypes";
 const initialState = () => {
   return {
     currentGiph: { url: '', searchTerm: '', weirdness: 0},
-    weirdness: 0,
     error: null,
     loading: false,
     searchTerm: ''

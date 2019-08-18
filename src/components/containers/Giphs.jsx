@@ -18,8 +18,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    dispatchFetchGiph: searchTerm =>
-      dispatch(giphActions.fetchGiph(searchTerm)),
+    dispatchFetchGiph: (searchTerm, weirdness) =>
+      dispatch(giphActions.fetchGiph(searchTerm, weirdness)),
     addLike: totalLiked => dispatch(likeActions.addLike(totalLiked)),
     removeLike: totalLiked => dispatch(likeActions.removeLike(totalLiked)),
     removeAllLikes: totalLiked =>
@@ -42,7 +42,7 @@ class GiphsDisconnected extends Component {
   };
 
   handleSubmitButton = () => {
-    this.props.dispatchFetchGiph(this.state.searchTerm);
+    this.props.dispatchFetchGiph(this.state.searchTerm, this.state.sliderValue);
   };
 
   handleSliderChange = event => {
@@ -64,64 +64,79 @@ class GiphsDisconnected extends Component {
     console.log('this.state', this.state);
     return (
       <>
-        <div className={classes.text}>
-          <p>
-            Find out our wierd you are by selecting the GIFS that make you
-            laugh. We'll show you the least wierdest ones to start, but you can
-            move the slider to make them wierder.
-          </p>
-          <p>
-            When you find a GIF you like, press the <i>Like</i> button. Once you
-            like 5 GIFs, we'll show you how wierd you are.
-          </p>
-        </div>
-        <div className={classes.form}>
-          <input
-            className={classes.textInput}
-            value={searchTerm}
-            onChange={this.handleTyping}
-            type="text"
-            placeholder="Search For A GIF"
-          />
-          <button
-            className={classes.submitButton}
-            onClick={() => this.handleSubmitButton()}
-          >
-            Submit
-          </button>
-        </div>
-        <div className={classes.resultSection}>
-          {currentGiph.url ? (
-            <div className={classes.resultContainer}>
-              <h3>Your Result</h3>
-              <div className={classes.giph}>
-                {currentGiph.searchTerm ? (
-                  <p>{currentGiph.searchTerm}</p>
-                ) : null}
-                {currentGiph.url ? (
-                  <img
-                    className={classes.img}
-                    src={this.props.currentGiph.url}
-                    alt="Reload Please: Unable to Render Giph"
-                  />
-                ) : null}
-                <br />
-                {currentGiph.url ? (
-                  <button onClick={() => addLike(totalLiked)}>Like</button>
-                ) : null}
-                <br />
-                <input
-                  className={classes.slider}
-                  onChange={this.handleSliderChange}
-                  type="range"
-                  min="0"
-                  max="10"
-                  value={this.state.sliderValue}
-                  id="myRange"
-                />
-              </div>
+        <div className={classes.page}>
+          <div>
+            <div className={classes.text}>
+              <p>
+                Find out our wierd you are by selecting the GIFS that make you
+                laugh. We'll show you the least wierdest ones to start, but you
+                can move the slider to make them wierder.
+              </p>
+              <p>
+                When you find a GIF you like, press the <i>Like</i> button. Once
+                you like 5 GIFs, we'll show you how wierd you are.
+              </p>
             </div>
-          ) : null}
+            <div className={classes.form}>
+              <input
+                className={classes.textInput}
+                value={searchTerm}
+                onChange={this.handleTyping}
+                type="text"
+                placeholder="Search For A GIF"
+              />
+              <button
+                className={classes.submitButton}
+                onClick={() => this.handleSubmitButton()}
+              >
+                Submit
+              </button>
+            </div>
+            <div className={classes.resultSection}>
+              {currentGiph.url ? (
+                <div className={classes.resultContainer}>
+                  <h3>Your Result</h3>
+                  <div className={classes.giph}>
+                    {currentGiph.searchTerm ? (
+                      <p>{currentGiph.searchTerm}</p>
+                    ) : null}
+                    {currentGiph.url ? (
+                      <img
+                        className={classes.img}
+                        src={this.props.currentGiph.url}
+                        alt="Reload Please: Unable to Render Giph"
+                      />
+                    ) : null}
+                    <br />
+                    {currentGiph.url ? (
+                      <button
+                        onClick={() =>
+                          addLike({
+                            gifUrl: currentGiph.url,
+                            gifWeirdness: currentGiph.weirdness,
+                            gifSearchTerm: this.state.searchTerm
+                          })
+                        }
+                      >
+                        Like
+                      </button>
+                    ) : null}
+                    <br />
+                    <input
+                      className={classes.slider}
+                      onChange={this.handleSliderChange}
+                      type="range"
+                      min="0"
+                      max="10"
+                      value={this.state.sliderValue}
+                      id="myRange"
+                    />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+          <div className={classes.liked}>asdfasdf</div>
         </div>
       </>
     );
@@ -129,13 +144,21 @@ class GiphsDisconnected extends Component {
 }
 
 const styles = {
+  page: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  liked: {
+    backgroundColor: 'red',
+    width: '40%',
+    height: '100%'
+  },
   img: {
     marginBottom: 15
   },
   text: {
     display: 'flex',
-    flexDirection: 'column',
-    width: '60%'
+    flexDirection: 'column'
   },
   textInput: {
     height: 25,
@@ -145,8 +168,8 @@ const styles = {
     marginBottom: 25
   },
   form: {
-    display: 'flex',
-    flexDirection: 'row',
+    // display: 'flex',
+    // flexDirection: 'row',
     marginTop: 10
   },
   submitButton: {
