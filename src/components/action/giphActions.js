@@ -1,6 +1,5 @@
 import fetch from 'cross-fetch'
 import * as types from '../constants/actionTypes.js';
-import giphyReducer from '../reducers/giphyReducer'
 
 const API_KEY = 'I2bfcu5IvRbRETTT4hTidiqxECuffcR7';
 
@@ -25,7 +24,8 @@ const API_KEY = 'I2bfcu5IvRbRETTT4hTidiqxECuffcR7';
 // }
 
 export function fetchGiph(searchTerm) {
-  const url = `http://api.giphy.com/v1/gifs/translate?s=${searchTerm}&${giphyReducer.weirdness}weirdness=10&api_key=${API_KEY}`
+  const weirdness = 1;
+  const url = `http://api.giphy.com/v1/gifs/translate?s=${searchTerm}&${weirdness}weirdness=10&api_key=${API_KEY}`
   return (dispatch) => {
     //dispatch(itemsIsLoading(true));
     fetch(url)
@@ -33,11 +33,10 @@ export function fetchGiph(searchTerm) {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
-            console.log('got here dude', response)
             return response;
         })
         .then((response) => response.json())
-        .then((giphies) => dispatch({ type: types.FETCH_GIF, payload: giphies }))
+        .then((giphies) => dispatch({ type: types.FETCH_GIF, payload: { giphies: giphies.data, searchTerm, weirdness }}))
         .catch((error) => dispatch({ type: 'ERROR', payload: error }));
   };
 }
