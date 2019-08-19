@@ -22,7 +22,3 @@ export function fetchGiph(searchTerm, weirdness) {
 export const updateWeirdnessScore = weirdness => {
   return { type: types.UPDATE_WEIRDNESS_SCORE, payload: weirdness };
 };
-
-export const invalidSearch = error => {
-  return { type: types.INVALID_SEARCH, payload: error };
-};
