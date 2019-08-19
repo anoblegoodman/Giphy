@@ -60,7 +60,6 @@ class GiphsDisconnected extends Component {
 
   handleLikeClick = () => {
     const { currentGiph, addLike } = this.props;
-    //this.likeRef.current.setAttribute("disabled", true);
     addLike({
       gifUrl: currentGiph.url,
       gifWeirdness: currentGiph.weirdness,
@@ -69,14 +68,16 @@ class GiphsDisconnected extends Component {
   };
 
   gatherLikedGifs = () => {
-    const classes = this.props || {};
+    const { classes, totalLikedGifs } = this.props || {};
     if (this.props.totalLikedGifs.length === 0) {
       return null;
     }
-    const likedComponents = this.props.totalLikedGifs.map(liked =>
+    const likedComponents = totalLikedGifs.map((liked, index) =>
       liked.url ? (
         <div className={classes.resultGiph}>
-          {liked.searchTerm ? <p>{liked.searchTerm}</p> : null}
+          {liked.searchTerm ? (
+            <p className={classes.info}>{liked.searchTerm}</p>
+          ) : null}
           {liked.url ? (
             <img
               className={classes.img}
@@ -99,8 +100,6 @@ class GiphsDisconnected extends Component {
               Unlike
             </button>
           ) : null}
-          <br />
-          <p>{`Weirdness Score: ${liked.weirdness}`}</p>
         </div>
       ) : null
     );
@@ -113,19 +112,20 @@ class GiphsDisconnected extends Component {
       removeLike,
       removeAllLikes,
       addLike,
-      classes
+      totalLikedGifs,
+      classes,
+      currentGiph
     } = this.props;
     const { searchTerm } = this.state;
-    const { currentGiph } = this.props;
 
     return (
       <>
         <div className={classes.page}>
-          <div>
-            <div className={classes.text}>
+          <div className={classes.leftSide}>
+            <div>
               <p>
                 Find out how weird you are by selecting the GIFS that make you
-                laugh. We'll show you the least wierd ones to start, but you can
+                laugh. We'll show you the least weird ones to start, but you can
                 move the slider to make them weirder.
               </p>
               <p>
@@ -153,7 +153,7 @@ class GiphsDisconnected extends Component {
                 Submit
               </button>
             </div>
-            <div className={classes.resultSection}>
+            <div>
               {currentGiph.url ? (
                 <div className={classes.resultContainer}>
                   <h3>Your Result</h3>
@@ -192,7 +192,15 @@ class GiphsDisconnected extends Component {
               ) : null}
             </div>
           </div>
-          <div className={classes.liked}>{this.gatherLikedGifs()}</div>
+          <div className={classes.rightSide}>{this.gatherLikedGifs()}
+          <div className={classes.calculate}>
+            <button onClick={() => console.log()}>
+              CALCULATE MY WEIRDNESS SCORE
+            </button>
+            <p>{`You must Like ${5 -
+              totalLikedGifs.length} more GIFs to calculate your score`}</p>
+          </div>
+          </div>
         </div>
       </>
     );
@@ -202,21 +210,35 @@ class GiphsDisconnected extends Component {
 const styles = {
   page: {
     display: 'flex',
-    flexDirection: 'row'
-  },
-  liked: {
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  calculate: {
+    flex: '1',
+    boxSizing: 'border-box',
+    textAlign: 'center',
+    marginTop: 40
+  },
+  leftSide: {
+    width: '50%'
+  },
+  rightSide: {
+    width: '45%',
+    display: 'flex',
     flexWrap: 'wrap',
-    width: '60%',
-    height: '100%'
+    height: 600
+  },
+  resultGiph: {
+    height: 100,
+    flex: '0 50%',
+    boxSizing: 'border-box',
+    textAlign: 'center'
+  },
+  info: {
+    textAlign: 'center'
   },
   img: {
     marginBottom: 15
-  },
-  text: {
-    display: 'flex',
-    flexDirection: 'column'
   },
   textInput: {
     height: 25,
@@ -240,11 +262,6 @@ const styles = {
     width: '80%',
     height: 15
   },
-  resultSection: {
-    marginLeft: 5,
-    marginTop: 5,
-    width: '75%'
-  },
   resultContainer: {
     boxShadow: '10px 10px 5px -8px rgba(0,0,0,0.75)'
   },
@@ -252,16 +269,6 @@ const styles = {
     display: 'block',
     textAlign: 'center',
     padding: 25
-  },
-  resultGiph: {
-    maxWidth: '50%',
-    display: 'block',
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '40%',
-    height: '100%'
   }
 };
 
@@ -271,7 +278,3 @@ export const Giphs = connect(
   mapStateToProps,
   mapDispatchToProps
 )(StyledGiph);
-
-//this is the unlike and remove all likes functionality for right side of page
-// <button onClick={() => removeLike(totalLiked)}>Unlike</button>
-// <button onClick={() => removeAllLikes()}>Remove All Likes</button>

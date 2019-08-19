@@ -3,7 +3,6 @@ import {
   REMOVE_LIKE,
   REMOVE_ALL_LIKES
 } from '../constants/actionTypes';
-import { stat } from 'fs';
 
 const initialState = () => {
   return {
@@ -22,7 +21,7 @@ const likesReducer = (state = initialState(), action) => {
     case REMOVE_LIKE:
       const { payload } = action;
       const totalLikedGifs = [...state.totalLikedGifs];
-      const withOutRemoved = totalLikedGifs.filter(liked => {
+      const withoutRemoved = totalLikedGifs.filter(liked => {
         return (
           payload.url !== liked.url &&
           payload.searchTerm !== liked.searchTerm &&
@@ -31,7 +30,7 @@ const likesReducer = (state = initialState(), action) => {
       });
       return {
         ...state,
-        totalLikedGifs: withOutRemoved
+        totalLikedGifs: withoutRemoved
       };
     case REMOVE_ALL_LIKES:
       return {
