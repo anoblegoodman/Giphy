@@ -195,7 +195,7 @@ class GiphsDisconnected extends Component {
           </div>
           <div className={classes.rightSide}>{this.gatherLikedGifs()}
           <div className={classes.calculate}>
-            <button onClick={() => this.props.setRoute('results')}>
+            <button onClick={() => totalLikedGifs.length === 5 ? this.props.setRoute('results') : null}>
               CALCULATE MY WEIRDNESS SCORE
             </button>
             <p>{`You must Like ${5 -
