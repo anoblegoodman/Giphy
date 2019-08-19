@@ -19,6 +19,3 @@ export function fetchGiph(searchTerm, weirdness) {
   };
 }
 
-export const updateWeirdnessScore = weirdness => {
-  return { type: types.UPDATE_WEIRDNESS_SCORE, payload: weirdness };
-};
