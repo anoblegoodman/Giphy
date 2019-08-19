@@ -9,7 +9,6 @@ const mapStateToProps = state => {
     totalLikedGifs: state.likesReducer.totalLikedGifs,
     weirdness: state.giphyReducer.weirdness,
     currentGiph: state.giphyReducer.currentGiph,
-    usersLikes: state.giphyReducer.usersLikes,
     error: state.giphyReducer.error,
     loading: state.giphyReducer.loading,
     searchTerm: state.giphyReducer.searchTerm
@@ -59,6 +58,7 @@ class GiphsDisconnected extends Component {
   };
 
   handleLikeClick = () => {
+    this.likeRef.current.setAttribute("disabled", true);
     const { currentGiph, addLike } = this.props;
     addLike({
       gifUrl: currentGiph.url,
@@ -72,7 +72,7 @@ class GiphsDisconnected extends Component {
     if (this.props.totalLikedGifs.length === 0) {
       return null;
     }
-    const likedComponents = totalLikedGifs.map((liked, index) =>
+    const likedComponents = totalLikedGifs.map(liked =>
       liked.url ? (
         <div className={classes.resultGiph}>
           {liked.searchTerm ? (
@@ -108,16 +108,17 @@ class GiphsDisconnected extends Component {
 
   render() {
     const {
-      totalLiked,
-      removeLike,
-      removeAllLikes,
-      addLike,
       totalLikedGifs,
       classes,
       currentGiph
     } = this.props;
+    
     const { searchTerm } = this.state;
 
+      if(totalLikedGifs.length === 5) {
+        this.likeRef.current.setAttribute("disabled", true);
+      }
+    
     return (
       <>
         <div className={classes.page}>
@@ -174,7 +175,7 @@ class GiphsDisconnected extends Component {
                         ref={this.likeRef}
                         onClick={() => this.handleLikeClick()}
                       >
-                        Like
+                        {totalLikedGifs.length === 5 ? 'The Liked Limit Has Been Reached' : 'Like'}
                       </button>
                     ) : null}
                     <br />
@@ -194,7 +195,7 @@ class GiphsDisconnected extends Component {
           </div>
           <div className={classes.rightSide}>{this.gatherLikedGifs()}
           <div className={classes.calculate}>
-            <button onClick={() => console.log()}>
+            <button onClick={() => this.props.setRoute('results')}>
               CALCULATE MY WEIRDNESS SCORE
             </button>
             <p>{`You must Like ${5 -
@@ -217,7 +218,7 @@ const styles = {
     flex: '1',
     boxSizing: 'border-box',
     textAlign: 'center',
-    marginTop: 40
+    marginTop: 40,
   },
   leftSide: {
     width: '50%'
@@ -226,7 +227,7 @@ const styles = {
     width: '45%',
     display: 'flex',
     flexWrap: 'wrap',
-    height: 600
+    height: 700
   },
   resultGiph: {
     height: 100,

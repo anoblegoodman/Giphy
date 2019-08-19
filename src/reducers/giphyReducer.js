@@ -10,7 +10,6 @@ const initialState = () => {
 };
 
 const giphyReducer = (state = initialState(), action) => {
-  console.log('GIPHY REDUCER', action)
   switch (action.type) {
     case FETCH_GIF:
       const { giphies, searchTerm, weirdness } = action.payload || {}

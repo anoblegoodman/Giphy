@@ -22,11 +22,7 @@ const likesReducer = (state = initialState(), action) => {
       const { payload } = action;
       const totalLikedGifs = [...state.totalLikedGifs];
       const withoutRemoved = totalLikedGifs.filter(liked => {
-        return (
-          payload.url !== liked.url &&
-          payload.searchTerm !== liked.searchTerm &&
-          payload.url !== liked.weirdness
-        );
+        return payload.url !== liked.url
       });
       return {
         ...state,
@@ -34,8 +30,7 @@ const likesReducer = (state = initialState(), action) => {
       };
     case REMOVE_ALL_LIKES:
       return {
-        ...state,
-        totalLiked: action.payload
+        totalLikedGifs: []
       };
     default:
       return state;
